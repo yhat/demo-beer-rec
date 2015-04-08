@@ -42,7 +42,6 @@ def get_sims(products):
     dists - a distance matrix
     product - a product id (integer)
     """
-    print dists
     p = dists[products].apply(lambda row: np.sum(row), axis=1)
     p = p.order(ascending=False)
     return p.index[p.index.isin(products) == False]
