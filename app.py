@@ -13,12 +13,12 @@ def index():
         try:
             pred = yh.predict("BeerRecommender", {"beers": request.json['beers'],
                           "n": request.json['n']})
-        return Response(json.dumps(pred),
-                        mimetype='application/json')
+            return Response(json.dumps(pred),
+                            mimetype='application/json')
         except Exception, e:
             print e
-        return Response(json.dumps({"error": str(e)}),
-                        mimetype='application/json')
+            return Response(json.dumps({"error": str(e)}),
+                            mimetype='application/json')
     else:
         # static files
         css_url = url_for('static', filename='css/main.css')
