@@ -5,6 +5,7 @@ import os
 
 
 filename = os.path.join("data/beer_reviews.csv")
+filename = "/Users/glamp/Dropbox-Yhat/yhat-box/datasets/beer_reviews/beer_reviews.csv"
 df = pd.read_csv(filename)
 # let's limit things to the top 250
 n = 250
@@ -41,12 +42,13 @@ def get_sims(products):
     dists - a distance matrix
     product - a product id (integer)
     """
+    print dists
     p = dists[products].apply(lambda row: np.sum(row), axis=1)
     p = p.order(ascending=False)
     return p.index[p.index.isin(products) == False]
 
 
-get_sims(["Sierra Nevada Pale Ale", "120 Minute IPA", "Stone Ruination IPA"])
+get_sims(["Sierra Nevada Pale Ale", "120 Minute IPA"])
 
 from yhat import Yhat, YhatModel, preprocess
 
@@ -62,7 +64,7 @@ class BeerRecommender(YhatModel):
         return result
 
 
-yh = Yhat("YOUR_USERNAME", "YOUR_APIKEY", "http://cloud.yhathq.com/")
+yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), "http://cloud.yhathq.com/")
 
 if raw_input("Deploy? (y/N)") == "y":
     print yh.deploy("BeerRecommender", BeerRecommender, globals())

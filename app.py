@@ -10,7 +10,7 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), "http://cloud.yhathq.com/")
-        pred = yh.predict("BeerRec", {"beers": request.json['beers'],
+        pred = yh.predict("BeerRecommender", {"beers": request.json['beers'],
                           "n": request.json['n']})
         return Response(json.dumps(pred),
                         mimetype='application/json')
