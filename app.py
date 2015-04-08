@@ -5,14 +5,19 @@ from yhat import Yhat
 import os
 app = Flask(__name__)
 
+yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), "http://cloud.yhathq.com/")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), "http://cloud.yhathq.com/")
-        pred = yh.predict("BeerRecommender", {"beers": request.json['beers'],
+        try:
+            pred = yh.predict("BeerRecommender", {"beers": request.json['beers'],
                           "n": request.json['n']})
         return Response(json.dumps(pred),
+                        mimetype='application/json')
+        except Exception, e:
+            print e
+        return Response(json.dumps({"error": str(e)}),
                         mimetype='application/json')
     else:
         # static files
