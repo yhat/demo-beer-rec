@@ -63,7 +63,7 @@ class BeerRecommender(YhatModel):
         return result
 
 
-yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), "http://cloud.yhathq.com/")
+yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), "http://sandbox.yhathq.com/")
 
 if raw_input("Deploy? (y/N)") == "y":
     print yh.deploy("BeerRecommender", BeerRecommender, globals())
