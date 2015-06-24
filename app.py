@@ -5,7 +5,7 @@ from yhat import Yhat
 import os
 app = Flask(__name__)
 
-yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), "http://sandbox.yhathq.com/")
+yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), "https://sandbox.yhathq.com/")
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
