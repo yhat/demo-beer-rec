@@ -63,10 +63,8 @@ class BeerRecommender(YhatModel):
         return result
 
 
-yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), "http://sandbox.yhathq.com/")
+yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), "https://sandbox.yhathq.com/")
+print yh.deploy("BeerRecommender", BeerRecommender, globals())
 
-if raw_input("Deploy? (y/N)") == "y":
-    print yh.deploy("BeerRecommender", BeerRecommender, globals())
-
-print yh.predict("BeerRecommender", {"beers": ["Sierra Nevada Pale Ale",
-                 "120 Minute IPA", "Stone Ruination IPA"]})
+# print yh.predict("BeerRecommender", {"beers": ["Sierra Nevada Pale Ale",
+#                  "120 Minute IPA", "Stone Ruination IPA"]})
