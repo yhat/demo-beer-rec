@@ -15,7 +15,7 @@ df = df[df.beer_name.isin(top_n)]
 print df.head()
 print "melting..."
 df_wide = pd.pivot_table(df, values=["review_overall"],
-                         rows=["beer_name", "review_profilename"],
+                         index=["beer_name", "review_profilename"],
                          aggfunc=np.mean).unstack()
 
 # any cells that are missing data (i.e. a user didn't buy a particular product)
