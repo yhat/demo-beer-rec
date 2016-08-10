@@ -25,6 +25,14 @@ var recommendation = {
         }
     },
     submit: function(){
+        if (! $("#beers").val()) {
+            $(".validation-error").remove();
+            $("#rec").append("<p class='lead text-primary validation-error'>🍻 Well we can't recommend you any beers if you don't tell us what you like! 🍻</p>");
+            setTimeout(function() {
+                $(".validation-error").remove();
+            }, 2000);
+            return;
+        }
         var chosen_beer = $("#beers").val();
         var payload = {
             beers: chosen_beer,
