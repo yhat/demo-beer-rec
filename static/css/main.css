@@ -978,7 +978,7 @@ p {
 .lead {
   margin-bottom: 24px;
   font-size: 18px;
-  font-weight: 200;
+  font-weight: 600;
   line-height: 1.4;
 }
 @media (min-width: 768px) {
