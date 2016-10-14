@@ -4,8 +4,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 
 
-filename = os.path.join("data/beer_reviews.csv")
-# filename = "~/Dropbox-Yhat/yhat-box/datasets/beer_reviews/beer_reviews.csv"
+filename = "./data/beer_reviews.csv"
+# filename = "~/Dropbox\ \(Yhat\)/yhat-box/datasets/beer_reviews/beer_reviews.csv"
 df = pd.read_csv(filename)
 # let's limit things to the top 250
 n = 250
