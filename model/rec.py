@@ -4,10 +4,10 @@ from sklearn.metrics.pairwise import cosine_similarity
 import os
 import string
 
-import seaborn as sns
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 from bandit import *
 
@@ -28,8 +28,9 @@ n = df.shape[0]
 
 # create some summary charts:
 # distribution of votes
-dist_plot = sns.distplot(df.beer_name.value_counts())
-dist_plot.figure.savefig(bandit.output_dir + 'dist_plot.png')
+f, ax = plt.subplots(figsize=(8, 8))
+ax = sns.distplot(df.beer_name.value_counts())
+f.savefig(bandit.output_dir + 'dist_plot.png')
 
 bandit.metadata['>10 Votes'] = pd.value_counts(df.beer_name.value_counts() > 10)[True]
 bandit.metadata.reviews = int(df.beer_name.describe()['count'])
@@ -67,8 +68,9 @@ dists.index = dists.columns
 
 ###############Dashboard###############
 # our matrix
-mx_plot = sns.heatmap(dists.iloc[:20,:20])
-mx_plot.figure.savefig(bandit.output_dir + 'matrix.png')
+g, ax = plt.subplots(figsize=(8, 8))
+ax = sns.heatmap(dists.iloc[:20,:20])
+g.savefig(bandit.output_dir + 'matrix.png')
 
 # our ranked beers
 top_reviews = df.beer_name.value_counts().reset_index()[:10]
