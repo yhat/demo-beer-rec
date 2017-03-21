@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import os
+import string
 
 import seaborn as sns
 import matplotlib as mpl
@@ -17,7 +18,7 @@ filename = "http://yhat-data.s3.amazonaws.com/beer_reviews.csv"
 df = pd.read_csv(filename)
 
 # fix our unicode
-import string
+
 printable = set(string.printable)
 df.beer_name = df.beer_name.map(lambda y: filter(lambda x: x in printable, y))
 # let's limit things to the top 250
