@@ -11,7 +11,7 @@ from bandit import *
 
 bandit = Bandit()
 
-filename = "./data/beer_reviews.csv"
+filename = "./model/data/beer_reviews.csv"
 # filename = "~/Dropbox\ \(Yhat\)/yhat-box/datasets/beer_reviews/beer_reviews.csv"
 df = pd.read_csv(filename)
 
@@ -67,21 +67,22 @@ dists.index = dists.columns
 
 ###############Dashboard###############
 # our matrix
-sns.heatmap(dists.iloc[:20,:20])
-plt.save(bandit.output_dir + 'matrix.png')
+mx_plot = sns.heatmap(dists.iloc[:20,:20])
+mx_plot.figure.savefig(bandit.output_dir + 'matrix.png')
 
 # our ranked beers
 top_reviews = df.beer_name.value_counts().reset_index()[:10]
 top_reviews.columns = ['beer','reviews']
+top_reviews = top_reviews.to_html(classes='table table-striped table-hover')
 
 template = open("dashboard.html", 'r').read()
 dashboard = open(bandit.output_dir + "dashboard.html", "w")
 
 table = template.replace('{BANDIT_TABLE}', top_reviews)
 img1_str = '<img src="matrix.png" style="max-height:350px;" />'
-img2_str = '<img src="dist.png" style="max-height:350px;" />'
+# img2_str = '<img src="dist.png" style="max-height:350px;" />'
 table = table.replace('{BANDIT_PLOT_1}', img1_str)
-table = table.replace('{BANDIT_PLOT_2}', img2_str)
+# table = table.replace('{BANDIT_PLOT_2}', img2_str)
 
 dashboard.write(table)
 dashboard.close()
