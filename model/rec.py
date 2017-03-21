@@ -6,6 +6,7 @@ import string
 
 import seaborn as sns
 import matplotlib as mpl
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
 from bandit import *
