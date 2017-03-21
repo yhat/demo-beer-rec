@@ -28,8 +28,8 @@ n = df.shape[0]
 
 # create some summary charts:
 # distribution of votes
-sns.distplot(df.beer_name.value_counts())
-plt.show()
+dist_plot = sns.distplot(df.beer_name.value_counts())
+dist_plot.figure.savefig(bandit.output_dir + 'dist_plot.png')
 
 bandit.metadata['>10 Votes'] = pd.value_counts(df.beer_name.value_counts() > 10)[True]
 bandit.metadata.reviews = int(df.beer_name.describe()['count'])
@@ -80,9 +80,9 @@ dashboard = open(bandit.output_dir + "dashboard.html", "w")
 
 table = template.replace('{BANDIT_TABLE}', top_reviews)
 img1_str = '<img src="matrix.png" style="max-height:350px;" />'
-# img2_str = '<img src="dist.png" style="max-height:350px;" />'
+img2_str = '<img src="dist_plot.png" style="max-height:350px;" />'
 table = table.replace('{BANDIT_PLOT_1}', img1_str)
-# table = table.replace('{BANDIT_PLOT_2}', img2_str)
+table = table.replace('{BANDIT_PLOT_2}', img2_str)
 
 dashboard.write(table)
 dashboard.close()
