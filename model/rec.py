@@ -42,9 +42,6 @@ df = df[df.beer_name.isin(n_reviews[n_reviews > n_reviews.quantile(quantile)].in
 
 top_beers = n_reviews[:50].index.tolist()
 
-
-# df = df[df.beer_name.isin(top_n)]
-
 print df.head()
 print "melting..."
 df_wide = pd.pivot_table(df, values=["review_overall"],
@@ -118,7 +115,6 @@ def get_sims(products, n_recs=None, prob=False, unique=False):
 
     return p[0:n_recs]
 
-
 get_sims(["Sierra Nevada Pale Ale", "60 Minute IPA"])
 
 from yhat import Yhat, YhatModel, preprocess
@@ -141,6 +137,7 @@ model.execute({'beers':["Sierra Nevada Pale Ale"],'n_recs':10})
 
 yh = Yhat("colin", "ce796d278f4840e30e763413d8b4baa4", "http://do-sb-dev-master.x.yhat.com/")
 print yh.deploy("BeerRecommender", BeerRecommender, globals(), autodetect=False)
+
 
 # print yh.predict("BeerRecommender", {"beers": ["Sierra Nevada Pale Ale",
 #                  "120 Minute IPA", "Stone Ruination IPA"]})
