@@ -128,6 +128,7 @@ class BeerRecommender(YhatModel):
         n_recs = data.get("n_recs")
         prob = data.get("prob")
         unique = data.get("unique")
+
         suggested_beers = get_sims(beers, n_recs, prob, unique)
         result = suggested_beers.to_dict(orient='records')
         return result
@@ -136,7 +137,7 @@ model = BeerRecommender()
 model.execute({'beers':["Sierra Nevada Pale Ale"],'n_recs':10})
 
 yh = Yhat("colin", "ce796d278f4840e30e763413d8b4baa4", "http://do-sb-dev-master.x.yhat.com/")
-print yh.deploy("BeerRecommender", BeerRecommender, globals(), autodetect=False)
+print yh.deploy("BeerRecommender", BeerRecommender, globals(), autodetect=False, sure=True)
 
 
 # print yh.predict("BeerRecommender", {"beers": ["Sierra Nevada Pale Ale",
