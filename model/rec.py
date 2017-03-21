@@ -3,14 +3,46 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import os
 
+import seaborn as sns
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+
+from bandit import *
+
+bandit = Bandit()
 
 filename = "./data/beer_reviews.csv"
 # filename = "~/Dropbox\ \(Yhat\)/yhat-box/datasets/beer_reviews/beer_reviews.csv"
 df = pd.read_csv(filename)
+
+# fix our unicode
+import string
+printable = set(string.printable)
+df.beer_name = df.beer_name.map(lambda y: filter(lambda x: x in printable, y))
 # let's limit things to the top 250
-n = 250
-top_n = df.beer_name.value_counts().index[:n]
-df = df[df.beer_name.isin(top_n)]
+# n = 250
+n = df.shape[0]
+
+# create some summary charts:
+# distribution of votes
+sns.distplot(df.beer_name.value_counts())
+plt.show()
+
+bandit.metadata['>10 Votes'] = pd.value_counts(df.beer_name.value_counts() > 10)[True]
+bandit.metadata.reviews = int(df.beer_name.describe()['count'])
+bandit.metadata.top_beer = str(df.beer_name.describe()['top'])
+bandit.metadata['50percentile'] = int(df.beer_name.value_counts().describe()['50%'])
+
+# top_n = df.beer_name.value_counts().index[:n]
+n_reviews = df.beer_name.value_counts()
+quantile = .95
+# we only want to recommend beers that have been reviewed by enough people
+df = df[df.beer_name.isin(n_reviews[n_reviews > n_reviews.quantile(quantile)].index)]
+
+top_beers = n_reviews[:50].index.tolist()
+
+
+# df = df[df.beer_name.isin(top_n)]
 
 print df.head()
 print "melting..."
@@ -33,8 +65,30 @@ dists = pd.DataFrame(dists, columns=df_wide.index)
 # give the indicies (equivalent to rownames in R) the name of the product id
 dists.index = dists.columns
 
+###############Dashboard###############
+# our matrix
+sns.heatmap(dists.iloc[:20,:20])
+plt.save(bandit.output_dir + 'matrix.png')
 
-def get_sims(products):
+# our ranked beers
+top_reviews = df.beer_name.value_counts().reset_index()[:10]
+top_reviews.columns = ['beer','reviews']
+
+template = open("dashboard.html", 'r').read()
+dashboard = open(bandit.output_dir + "dashboard.html", "w")
+
+table = template.replace('{BANDIT_TABLE}', top_reviews)
+img1_str = '<img src="matrix.png" style="max-height:350px;" />'
+img2_str = '<img src="dist.png" style="max-height:350px;" />'
+table = table.replace('{BANDIT_PLOT_1}', img1_str)
+table = table.replace('{BANDIT_PLOT_2}', img2_str)
+
+dashboard.write(table)
+dashboard.close()
+
+##################
+
+def get_sims(products, n_recs=None, prob=False, unique=False):
     """
     get_top10 takes a distance matrix an a productid (assumed to be integer)
     and will calculate the 10 most similar products to product based on the
@@ -43,28 +97,48 @@ def get_sims(products):
     product - a product id (integer)
     """
     p = dists[products].apply(lambda row: np.sum(row), axis=1)
-    p = p.order(ascending=False)
-    return p.index[p.index.isin(products) == False]
+    p = p.sort_values(ascending=False)
+
+    p = pd.DataFrame(p).reset_index()
+    p.columns = ['beer','rank']
+
+    if n_recs == None:
+        n_recs = len(p)
+
+    # remove the inputed beers
+    p = p[p.beer.isin(products) == False]
+
+    if unique==True:
+        p = p[p.beer.isin(top_beers) == False]
+
+    if prob==False:
+        p = p.drop(['rank'], axis=1)
+
+    return p[0:n_recs]
 
 
 get_sims(["Sierra Nevada Pale Ale", "60 Minute IPA"])
 
 from yhat import Yhat, YhatModel, preprocess
 
-
 class BeerRecommender(YhatModel):
-    @preprocess(in_type=dict, out_type=dict)
+    REQUIREMENTS=['numpy==1.11.3',
+                  'pandas==0.19.2',
+                  'scikit-learn==0.18.1']
     def execute(self, data):
         beers = data.get("beers")
-        suggested_beers = get_sims(beers)
-        result = []
-        for beer in suggested_beers:
-            result.append({"beer": beer})
+        n_recs = data.get("n_recs")
+        prob = data.get("prob")
+        unique = data.get("unique")
+        suggested_beers = get_sims(beers, n_recs, prob, unique)
+        result = suggested_beers.to_dict(orient='records')
         return result
 
+model = BeerRecommender()
+model.execute({'beers':["Sierra Nevada Pale Ale"],'n_recs':10})
 
-yh = Yhat(raw_input("Yhat username: "), raw_input("Yhat apikey: "), raw_input("Yhat url: "))
-print yh.deploy("BeerRecommender", BeerRecommender, globals())
+yh = Yhat("colin", "ce796d278f4840e30e763413d8b4baa4", "http://do-sb-dev-master.x.yhat.com/")
+print yh.deploy("BeerRecommender", BeerRecommender, globals(), autodetect=False)
 
 # print yh.predict("BeerRecommender", {"beers": ["Sierra Nevada Pale Ale",
 #                  "120 Minute IPA", "Stone Ruination IPA"]})
