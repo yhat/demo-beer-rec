@@ -16,6 +16,7 @@ bandit = Bandit()
 # filename = "./model/data/beer_reviews.csv"
 #
 filename = "http://yhat-data.s3.amazonaws.com/beer_reviews.csv"
+print 'downloading latest data....'
 df = pd.read_csv(filename)
 
 # fix our unicode
