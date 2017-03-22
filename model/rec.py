@@ -70,6 +70,7 @@ dists.index = dists.columns
 # our matrix
 g, ax = plt.subplots(figsize=(8, 8))
 ax = sns.heatmap(dists.iloc[:20,:20])
+print bandit.output_dir + 'matrix.png'
 g.savefig(bandit.output_dir + 'matrix.png')
 
 # our ranked beers
