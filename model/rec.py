@@ -37,6 +37,11 @@ bandit.metadata.reviews = int(df.beer_name.describe()['count'])
 bandit.metadata.top_beer = str(df.beer_name.describe()['top'])
 bandit.metadata['50percentile'] = int(df.beer_name.value_counts().describe()['50%'])
 
+review_dist = df.review_overall.value_counts().sort_values(ascending=True).tolist()
+
+for review in review_dist:
+    bandit.stream('review_count', review)
+
 # top_n = df.beer_name.value_counts().index[:n]
 n_reviews = df.beer_name.value_counts()
 quantile = .95
