@@ -149,7 +149,7 @@ class BeerRecommender(YhatModel):
 model = BeerRecommender()
 model.execute({'beers':["Sierra Nevada Pale Ale"],'n_recs':10})
 
-yh = Yhat("colin", "ce796d278f4840e30e763413d8b4baa4", "http://do-sb-dev-master.x.yhat.com/")
+yh = Yhat("demo-master", "3b0160e10f6d7a94a2528b11b1c9bca1", "https://sandbox.c.yhat.com/")
 print yh.deploy("BeerRecommender", BeerRecommender, globals(), autodetect=False, sure=True)
 
 
