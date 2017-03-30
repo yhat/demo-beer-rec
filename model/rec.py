@@ -85,7 +85,7 @@ top_reviews.columns = ['beer','reviews']
 top_reviews = top_reviews.to_html(classes='table table-striped table-hover')
 
 bandit.make_dashboard('beer dashboard', template_file="dashboard.html"
-, BANDIT_PLOT_1='matrix.png', BANDIT_PLOT_2='dist_plot.png', BANDIT_TABLE=top_reviews)
+, BANDIT_PLOT_1='matrix.png', BANDIT_PLOT_2='dist_plot.png', BANDIT_TABLE=top_reviews, REVIEWS=bandit.metadata.reviews)
 # template = open("dashboard.html", 'r').read()
 # dashboard = open(bandit.output_dir + "dashboard.html", "w")
 

@@ -32,21 +32,26 @@
     <div class="container">
         <div class="page-header" id="banner" style="margin-top:80px;">
             <div class="row">
-              <h4>Distribution of Beer Data</h4>
+                <h4>Distribution of Beer Data</h4>
             </div>
             <div class="row">
                 <div class="col-sm-6">
                     <img src="{{BANDIT_PLOT_1}}" style="max-height:350px;" />'
                 </div>
                 <div class="col-sm-6">
-                  <img src="{{BANDIT_PLOT_2}}" style="max-height:350px;" />'
+                    <img src="{{BANDIT_PLOT_2}}" style="max-height:350px;" />'
                 </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="bs-component">
-                            <div id='customer-table'>
-                                {{{BANDIT_TABLE}}}
-                            </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-6">
+                <h4>Beer Reviews: {{REVIEWS}}</h4>
+              </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="bs-component">
+                        <div id='customer-table'>
+                            {{{BANDIT_TABLE}}}
                         </div>
                     </div>
                 </div>
