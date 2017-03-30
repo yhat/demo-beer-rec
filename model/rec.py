@@ -84,17 +84,19 @@ top_reviews = df.beer_name.value_counts().reset_index()[:10]
 top_reviews.columns = ['beer','reviews']
 top_reviews = top_reviews.to_html(classes='table table-striped table-hover')
 
-template = open("dashboard.html", 'r').read()
-dashboard = open(bandit.output_dir + "dashboard.html", "w")
+bandit.make_dashboard('beer dashboard', template_file="../dashboard.html"
+, BANDIT_PLOT_1='matrix.png', BANDIT_PLOT_2='dist_plot.png', BANDIT_TABLE=top_reviews)
+# template = open("dashboard.html", 'r').read()
+# dashboard = open(bandit.output_dir + "dashboard.html", "w")
 
-table = template.replace('{BANDIT_TABLE}', top_reviews)
-img1_str = '<img src="matrix.png" style="max-height:350px;" />'
-img2_str = '<img src="dist_plot.png" style="max-height:350px;" />'
-table = table.replace('{BANDIT_PLOT_1}', img1_str)
-table = table.replace('{BANDIT_PLOT_2}', img2_str)
+# table = template.replace('{BANDIT_TABLE}', top_reviews)
+# img1_str = '<img src="matrix.png" style="max-height:350px;" />'
+# img2_str = '<img src="dist_plot.png" style="max-height:350px;" />'
+# table = table.replace('{BANDIT_PLOT_1}', img1_str)
+# table = table.replace('{BANDIT_PLOT_2}', img2_str)
 
-dashboard.write(table)
-dashboard.close()
+# dashboard.write(table)
+# dashboard.close()
 
 ##################
 
