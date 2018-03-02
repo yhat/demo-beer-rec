@@ -51,12 +51,12 @@ var recommendation = {
                 }
                 for (var i=0; i < 5; i++){
                     var $this_beer = $('.col-1 .beer:nth-child('+(i+1)+')');
-                    $this_beer.find('.name').html(d.result[i].name);
+                    $this_beer.find('.name').html(d.result[i].beer);
                     $this_beer.addClass('show');
                 }
                 for (var i=5; i < 10; i++){
                     var $this_beer = $('.col-2 .beer:nth-child('+(i-4)+')');
-                    $this_beer.find('.name').html(d.result[i].name);
+                    $this_beer.find('.name').html(d.result[i].beer);
                     $this_beer.addClass('show');
                 }
                 Prism.highlightAll();
