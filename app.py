@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 from flask import Flask, request, render_template, url_for, Response, json
-from yhat import Yhat
 import os
 import requests
 from requests.auth import HTTPBasicAuth
