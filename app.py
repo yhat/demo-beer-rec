@@ -3,17 +3,23 @@
 from flask import Flask, request, render_template, url_for, Response, json
 from yhat import Yhat
 import os
+import requests
+from requests.auth import HTTPBasicAuth
 app = Flask(__name__)
 
-yh = Yhat(os.environ.get("YHAT_USERNAME"), os.environ.get("YHAT_APIKEY"), os.environ.get("YHAT_URL"))
+
+def make_prediction(data):
+    auth=('colin', '25b58a60-d246-4466-b354-80e20d71225e')
+    r = requests.post('https://promote.c.yhat.com/colin/models/BeerRecommender/predict', json = data, auth = auth)
+    return r.json()
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         # print request.json['beers']
         try:
-            pred = yh.predict("BeerRecommender", {"beers": request.json['beers'],
-                          "n": request.json['n']})
+            pred = make_prediction({"beers": request.json['beers'] })
             return Response(json.dumps(pred), mimetype='application/json')
         except Exception, e:
             print e
